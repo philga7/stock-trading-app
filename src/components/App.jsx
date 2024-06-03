@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Header from './Header';
 import SearchBar from './SearchBar';
-// import StockContainer from './StockContainer';
+import StockContainer from './StockContainer';
 // import PortfolioContainer from './PortfolioContainer';
 import './../App.css';
 
@@ -38,6 +38,14 @@ function App() {
         <Header />
       </header>
       {/* Render the StockContainer and PortfolioContainer */}
+      <div className='row'>
+        <div className='col-8'>
+          <StockContainer
+            stocks={stocks}
+            onStockClick={handleAddStock}
+          />
+        </div>
+      </div>
     </div>
   );
 }
