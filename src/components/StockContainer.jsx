@@ -1,7 +1,7 @@
 import React from 'react';
-// import Stock from './Stock';
+import Stock from './Stock';
 
-function StockContainer() {
+function StockContainer({ stocks }) {
     // Map over the array of stocks and create a Stock component for each stock
     const stockList = stocks.map((stock) => <Stock key={stock.id} stock={stock} />);
 
