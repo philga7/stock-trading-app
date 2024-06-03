@@ -1,6 +1,6 @@
 # Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app). It will be based upon the basic app located at https://medium.com/@parker.crosgrove9/react-sushi-saga-lab-4726f2496379.
 
 ## Available Scripts
 
