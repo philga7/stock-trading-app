@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import Header from './Header';
-import SearchBar from './SearchBar';
-import StockContainer from './StockContainer';
+import React, { useState } from 'react';
+import Header from './components/Header';
+import SearchBar from './components/SearchBar';
+import StockContainer from './components/StockContainer';
 // import PortfolioContainer from './PortfolioContainer';
-import './../App.css';
+import './App.css';
 
 function App() {
   // Define state variables using the useState hook
