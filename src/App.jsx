@@ -1,78 +1,64 @@
 import React, { useState } from 'react';
 import Header from './components/Header';
-import SearchBar from './components/SearchBar';
-import StockContainer from './components/StockContainer';
-// import PortfolioContainer from './PortfolioContainer';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 import './App.css';
 
 function App() {
   // Define state variables using the useState hook
-  const [stocks, setStocks] = useState([]);
-  const [portfolio, setPortfolio] = useState([]);
-  const [sortBy, setSortBy] = useState('Alphabetically');
-  const [filterBy, setFilterBy] = useState('Tech');
+  const [closingPrice, setClosingPrice] = useState('');
+  const [symbol, setSymbol] = useState('');
 
-  // Fetch the list of stocks from the API using the useEffect hook
-  /*
-  useEffect(() => {
-    fetch('http://localhost:3001/stocks')
-      .then((response) => response.json())
-      .then(setStocks);
-  }, []);
-  */
+  // Fetch the list of stocks from the Polygon API
+  const fetchData = async () => {
+    try {
+      const apiKey = 'BlndBe349qcQPi0Y4TGXRBzw9ijWLJKN';
+      const response = await fetch (
+        `https://api.polygon.io/v2/aggs/ticker/${symbol.toUpperCase()}/prev?adjusted=true&apiKey=${apiKey}`
+      );
+      const data = await response.json();
 
-  // Handler function for when the user adds a stock to their portfolio
-  function handleAddStock(stockToAdd) {
-    const stockInPortfolio = portfolio.find(
-      (stock) => stock.id === stockToAdd.id
-    );
-    if (!stockInPortfolio) {
-      setPortfolio([...portfolio, stockToAdd])
-    }
+        if (data['results']) {
+          setClosingPrice(parseFloat(data['results'][0]['c']));
+        } else {
+          console.log('Invalid response format in API call')
+        } 
+      
+      } catch (error) {
+        console.error('Error fetching data: ', error);   
+      }
   }
-
-  // Handler function for when the user removes a stock from their portfolio
-  function handleRemoveStock(stockToRemove) {
-    setPortfolio((portfolio) => {
-      portfolio.filter((stock) => stock.id !== stockToRemove.id)
-    })
-  }
-
-  // Sort the list of stocks based on the current sort option
-  const sortedStocks = [...stocks].sort((stock1, stock2) => {
-    if (sortBy === 'Alphabetically') {
-      return stock1.name.localeCompare(stock2.name);
-    } else {
-      return stock2.price - stock1.price;
-    }
-  });
-
-  // Filter the list of stocks based on the current filter option
-  const filteredStocks = sortedStocks.filter(
-    (stock) => stock.type === filterBy
-  );
 
   return (
     <div>
-      {/* Render the SearchBar component */}
-      <SearchBar 
-        sortBy={sortBy}
-        onChangeSort={setSortBy}
-        filterBy={filterBy}
-        onChangeFilter={setFilterBy}
-      />
       {/* Render the Header component */}
       <header>
         <Header />
       </header>
-      {/* Render the StockContainer and PortfolioContainer */}
-      <div className='row'>
-        <div className='col-8'>
-          <StockContainer
-            stocks={filteredStocks}
-            onAddStock={handleAddStock}
-            onRemoveStock={handleRemoveStock}
-          />
+      <div className='container'>
+        <div className='row'>
+          <div className='col'>
+            <Form>
+              <Form.Group className='mb-3' controlId='symbol'>
+                <Form.Label>Stock Symbol </Form.Label>
+                <Form.Control 
+                  type='text'
+                  placeholder='Enter stock symbol'
+                  value={symbol}
+                  onChange={(event) => setSymbol(event.target.value)}
+                />
+              </Form.Group>
+              <Button 
+                variant='primary'
+                onClick={fetchData}
+              >
+                Get Closing Price
+              </Button>
+              <Form.Group className='mb-3' controlId='closingPrice'>
+                <Form.Label>Closing Price: {closingPrice}</Form.Label>
+              </Form.Group>
+            </Form>
+          </div>
         </div>
       </div>
     </div>
